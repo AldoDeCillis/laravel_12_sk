@@ -57,6 +57,27 @@
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
+
+    --color-primary-100: var(--color-primary-100);
+    --color-primary-200: var(--color-primary-200);
+    --color-primary-300: var(--color-primary-300);
+    --color-primary-400: var(--color-primary-400);
+    --color-primary-500: var(--color-primary-500);
+    --color-primary-600: var(--color-primary-600);
+    --color-primary-700: var(--color-primary-700);
+    --color-primary-800: var(--color-primary-800);
+    --color-primary-900: var(--color-primary-900);
+
+    --color-secondary-50: var(--color-secondary-50);
+    --color-secondary-100: var(--color-secondary-100);
+    --color-secondary-200: var(--color-secondary-200);
+    --color-secondary-300: var(--color-secondary-300);
+    --color-secondary-400: var(--color-secondary-400);
+    --color-secondary-500: var(--color-secondary-500);
+    --color-secondary-600: var(--color-secondary-600);
+    --color-secondary-700: var(--color-secondary-700);
+    --color-secondary-800: var(--color-secondary-800);
+    --color-secondary-900: var(--color-secondary-900);
 }
 
 /*
@@ -111,6 +132,26 @@
     --sidebar-accent-foreground: oklch(0.205 0 0);
     --sidebar-border: oklch(0.922 0 0);
     --sidebar-ring: oklch(0.87 0 0);
+    --color-primary-100: #d1d5f0;
+    --color-primary-200: #a4addb;
+    --color-primary-300: #7985c5;
+    --color-primary-400: #5865b0;
+    --color-primary-500: #3a47a0;
+    --color-primary-600: #2b357d;
+    --color-primary-700: #20285f;
+    --color-primary-800: #111827;
+    --color-primary-900: #0b101b;
+
+    --color-secondary-50:  #FFF7E5;   /* Molto chiaro, quasi bianco con sfumatura gialla */
+    --color-secondary-100: #FEEFCC;   /* Più chiaro del precedente */
+    --color-secondary-200: #FEE4A3;   /* Ancora più chiaro del 500 */
+    --color-secondary-300: #FDDA7A;   /* Leggermente più chiaro del 500 */
+    --color-secondary-400: #FDC83D;   /* Un po' più chiaro del 500 */
+    --color-secondary-500: #FDB900;   /* Il tuo colore base - mantenuto uguale */
+    --color-secondary-600: #D69C00;   /* 15% più scuro del 500 */
+    --color-secondary-700: #B38200;   /* 30% più scuro del 500 */
+    --color-secondary-800: #8C6600;   /* 45% più scuro del 500 */
+    --color-secondary-900: #664A00;
 }
 
 .dark {
@@ -156,4 +197,34 @@
     body {
         @apply bg-background text-foreground;
     }
+}
+
+
+.animate-scroll {
+    animation: scroll 100s linear infinite;
+}
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+.text-stroke-secondary-300 {
+    -webkit-text-stroke-width: 1px; /* Spessore del bordo */
+    -webkit-text-stroke-color: var(--color-secondary-300); /* Colore del bordo */
+}
+
+.bg-site{
+    background-size: cover;
+    background-position-x: 30%;
+}
+
+.bg-site-filtered{
+    background-size: cover;
+    background-position-x: 50%;
+    opacity: 0.2;
+    filter: grayscale(100%);
 }
