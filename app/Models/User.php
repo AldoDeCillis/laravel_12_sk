@@ -6,11 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, HasRoles, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -44,5 +45,37 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function employeeDocuments()
+    {
+        return $this->hasMany(EmployeeDocument::class);
+    }
+
+    public function communications()
+    {
+        return $this->hasMany(Communication::class);
+    }
+
+    public function getNewEmployeeDocumentsCount($categoryId = null)
+    {
+        $query = $this->employeeDocuments();
+
+        if ($categoryId) {
+            $query->where('category_id', $categoryId);
+        }
+
+        return $query->doesntHave('accessLogs')->count();
+    }
+
+    public function getNewCommunicationsCount($type = null)
+    {
+        $query = $this->communications();
+
+        if ($type) {
+            $query->where('type', $type);
+        }
+
+        return $query->whereDoesntHave('accessLogs')->count();
     }
 }
