@@ -10,20 +10,21 @@ import AppLogo from './app-logo';
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        url: '/dashboard',
+        url: '/',
         icon: LayoutGrid,
     },
 ];
 
+// Modifica qui i dati per Repository e Documentation
 const footerNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        url: 'https://github.com/laravel/react-starter-kit',
+        title: 'Nuovo Repository',
+        url: 'https://nuovo-repository-link.com',
         icon: Folder,
     },
     {
-        title: 'Documentation',
-        url: 'https://laravel.com/docs/starter-kits',
+        title: 'Nuova Documentation',
+        url: 'https://nuova-documentation-link.com',
         icon: BookOpen,
     },
 ];
