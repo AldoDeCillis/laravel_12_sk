@@ -8,22 +8,12 @@ import { BreadcrumbItem } from '@/types';
 import { router, usePage } from '@inertiajs/react';
 import React, { useEffect, useState } from 'react';
 import ChunkedUpload from '../../components/forms/chunked-upload';
+import { Category, Employee } from '../../types/index';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
     { title: 'Crea Documento Dipendente', href: '/employee-documents/create' },
 ];
-
-interface Employee {
-    id: number;
-    name: string;
-    email: string;
-}
-
-interface Category {
-    id: number;
-    name: string;
-}
 
 interface PageProps {
     employees: {

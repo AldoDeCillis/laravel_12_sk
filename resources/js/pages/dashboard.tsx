@@ -65,13 +65,13 @@ const dashboardCards: DashboardCardData[] = [
         icon: 'fa-regular fa-bullhorn',
         actions: [
             {
-                href: '/crea-comunicazione',
+                href: 'communications/create',
                 icon: 'fa-regular fa-plus',
                 label: 'Crea Comunicazione',
                 variant: 'primary',
             },
             {
-                href: '/comunicazioni',
+                href: 'communications/',
                 icon: 'fa-regular fa-list',
                 label: 'Lista Comunicazioni',
                 variant: 'secondary',

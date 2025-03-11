@@ -1,19 +1,21 @@
-// File: src/Pages/EmployeeDocuments/Index.tsx
-
 import ConfirmModal from '@/components/confirm-modal';
 import { Input } from '@/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
 import AppSidebarLayout from '@/layouts/app-layout';
 import { BreadcrumbItem } from '@/types';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { Toaster } from 'sonner';
-import { Category, Document, User } from '../../types/index';
+import { Communication } from '../../types/index';
+
+interface Category {
+    id: number;
+    name: string;
+}
 
 interface PageProps {
-    auth: User[];
-    documents: {
-        data: Document[];
+    auth: { user: any };
+    communications: {
+        data: Communication[];
         links: Array<{ url: string | null; label: string; active: boolean }>;
         current_page: number;
         last_page: number;
@@ -24,12 +26,12 @@ interface PageProps {
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
-    { title: 'Documenti', href: '/employee-documents' },
+    { title: 'Documenti', href: '/communications' },
 ];
 
 export default function Index() {
     const { props } = usePage<PageProps>();
-    const { documents, categories } = props;
+    const { communications, categories } = props;
 
     // Filtri per ricerca e categoria
     const [searchQuery, setSearchQuery] = useState('');
@@ -43,9 +45,9 @@ export default function Index() {
 
     // Aggiorna i dati quando searchQuery o categoryId cambiano
     useEffect(() => {
-        const currentPage = props.documents.current_page;
+        const currentPage = props.communications.current_page;
         router.get(
-            '/employee-documents',
+            '/employee-communications',
             { searchQuery, categoryId: categoryId === '' ? '' : categoryId, page: currentPage },
             { preserveState: true, replace: true },
         );
@@ -75,7 +77,7 @@ export default function Index() {
 
     const deleteDocument = () => {
         if (!confirmDocumentId) return;
-        router.delete(`/employee-documents/${confirmDocumentId}`, {
+        router.delete(`/employee-communications/${confirmDocumentId}`, {
             onSuccess: () => {
                 closeConfirmModal();
             },
@@ -94,7 +96,7 @@ export default function Index() {
                     <i className="fa-regular fa-magnifying-glass"></i>
                 </div>
             </div>
-            <Select value={categoryId === '' ? '' : String(categoryId)} onValueChange={(e) => setCategoryId(e === '' ? '' : Number(e))}>
+            {/* <Select value={categoryId === '' ? '' : String(categoryId)} onValueChange={(e) => setCategoryId(e === '' ? '' : Number(e))}>
                 <SelectTrigger className="w-full">
                     <div className="flex items-center justify-between">
                         <span>{categoryId === '' ? 'Tutte le categorie' : categories.find((cat) => cat.id === categoryId)?.name}</span>
@@ -107,7 +109,7 @@ export default function Index() {
                         </SelectItem>
                     ))}
                 </SelectContent>
-            </Select>
+            </Select> */}
         </div>
     );
 
@@ -131,7 +133,7 @@ export default function Index() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-200 bg-white">
-                                {documents.data.length === 0 ? (
+                                {communications.data.length === 0 ? (
                                     <tr>
                                         <td className="px-6 py-10 text-center" colSpan={5}>
                                             <div className="flex flex-col items-center">
@@ -141,14 +143,14 @@ export default function Index() {
                                         </td>
                                     </tr>
                                 ) : (
-                                    documents.data.map((doc) => (
+                                    communications.data.map((doc) => (
                                         <tr key={doc.id} className="hover:bg-secondary-100 transition-colors">
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center">
                                                     <i className="fa-regular fa-file-lines text-secondary-500 mr-3"></i>
                                                     <div>
                                                         <div className="text-sm font-medium text-slate-900">{doc.title}</div>
-                                                        <div className="text-sm text-slate-500">{doc.description}</div>
+                                                        <div className="text-sm text-slate-500">{doc.content}</div>
                                                     </div>
                                                 </div>
                                             </td>
@@ -163,15 +165,15 @@ export default function Index() {
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td className="px-6 py-4 text-sm text-slate-500">{doc.created_at_formatted ?? ''}</td>
+                                            <td className="px-6 py-4 text-sm text-slate-500">{doc.created_at ?? ''}</td>
                                             <td className="px-6 py-4">
                                                 <span className="bg-secondary-200 text-secondary-800 inline-flex items-center rounded-full px-2.5 py-0.5 text-[7pt] font-medium">
-                                                    {doc.category?.name ?? 'N/D'}
+                                                    {doc.type ?? 'N/D'}
                                                 </span>
                                             </td>
                                             <td className="px-6 py-4">
                                                 <div className="flex items-center space-x-3">
-                                                    <button
+                                                    {/* <button
                                                         className="text-secondary-600 hover:text-secondary-500"
                                                         title="Visualizza"
                                                         onClick={() => {
@@ -179,8 +181,8 @@ export default function Index() {
                                                         }}
                                                     >
                                                         <i className="fa-regular fa-eye"></i>
-                                                    </button>
-                                                    {doc.can_delete && (
+                                                    </button> */}
+                                                    {/* {doc.can_delete && (
                                                         <button
                                                             className="text-red-600 hover:text-red-500"
                                                             title="Elimina"
@@ -190,7 +192,7 @@ export default function Index() {
                                                         >
                                                             <i className="fa-regular fa-trash"></i>
                                                         </button>
-                                                    )}
+                                                    )} */}
                                                 </div>
                                             </td>
                                         </tr>
@@ -203,7 +205,7 @@ export default function Index() {
                     {/* Area fissa: ad esempio, per la paginazione */}
                     <div className="border-t border-slate-200 p-4">
                         <div className="flex justify-center">
-                            {documents.links.map((link, index) => (
+                            {communications.links.map((link, index) => (
                                 <Link
                                     key={index}
                                     href={link.url || '#'}
@@ -228,7 +230,7 @@ export default function Index() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-200 bg-white">
-                                {documents.data.length === 0 && (
+                                {communications.data.length === 0 && (
                                     <tr>
                                         <td className="px-6 py-10 text-center" colSpan={5}>
                                             <div className="flex flex-col items-center">
@@ -238,7 +240,7 @@ export default function Index() {
                                         </td>
                                     </tr>
                                 )}
-                                {documents.data.map((doc) => (
+                                {communications.data.map((doc) => (
                                     <tr key={doc.id} className="hover:bg-secondary-100 transition-colors">
                                         <td className="px-6 py-4">
                                             <div className="flex items-center">
@@ -297,7 +299,7 @@ export default function Index() {
                     </div>
                     <div className="border-t border-slate-200 p-4">
                         <div className="flex justify-center">
-                            {documents.links.map((link, index) => (
+                            {communications.links.map((link, index) => (
                                 <Link
                                     key={index}
                                     href={link.url || '#'}
@@ -310,14 +312,14 @@ export default function Index() {
                 </div> */}
 
                 {/* Vista Mobile: Card */}
-                <div className="mx-auto flex max-w-[90rem] flex-col space-y-4 px-4 pt-4 md:hidden">
-                    {documents.data.length === 0 ? (
+                {/* <div className="mx-auto flex max-w-[90rem] flex-col space-y-4 px-4 pt-4 md:hidden">
+                    {communications.data.length === 0 ? (
                         <div className="py-8 text-center">
                             <i className="fa-regular fa-folder-open mb-4 text-4xl text-slate-400"></i>
                             <p className="text-slate-500">Nessun documento trovato</p>
                         </div>
                     ) : (
-                        documents.data.map((doc) => (
+                        communications.data.map((doc) => (
                             <div key={doc.id} className="overflow-hidden rounded-xl border border-slate-200 bg-white">
                                 <div className="space-y-4 p-4">
                                     <div className="flex items-center space-x-3">
@@ -360,7 +362,7 @@ export default function Index() {
                     )}
                     <div className="p-4">
                         <div className="flex justify-center">
-                            {documents.links.map((link, index) => (
+                            {communications.links.map((link, index) => (
                                 <Link
                                     key={index}
                                     href={link.url || '#'}
@@ -370,11 +372,11 @@ export default function Index() {
                             ))}
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
 
             {/* Modal Viewer Documento */}
-            {showDocModal && selectedDoc && (
+            {/* {showDocModal && selectedDoc && (
                 <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black p-4">
                     <div className="max-h-[90vh] w-full max-w-5xl overflow-hidden rounded-lg bg-white shadow-xl">
                         <div className="flex items-center justify-between border-b border-gray-200 px-4 py-3">
@@ -391,13 +393,13 @@ export default function Index() {
                                 <iframe
                                     className="h-[600px] w-full md:h-[calc(90vh-160px)]"
                                     frameBorder="0"
-                                    src={`/employee-documents/${selectedDoc.id}/serve`}
+                                    src={`/employee-communications/${selectedDoc.id}/serve`}
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
-            )}
+            )} */}
 
             {/* Modal Conferma Eliminazione */}
             {showConfirmModal && (

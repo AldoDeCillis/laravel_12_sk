@@ -41,6 +41,12 @@ export interface User {
     [key: string]: unknown; // This allows for additional properties...
 }
 
+export interface Employee {
+    id: number;
+    name: string;
+    email: string;
+}
+
 export interface Category {
     id: number;
     name: string;
@@ -48,13 +54,25 @@ export interface Category {
 
 export interface Document {
     id: number;
-    user_id: number;
-    category_id: number;
     title: string;
     description: string;
+    created_at_formatted: string;
+    user?: { id: number; name: string; email: string };
+    category?: { id: number; name: string };
     file_path: string;
     expiration_date: string;
     created_at: string;
     updated_at: string;
+    can_delete: boolean;
+}
 
+export interface Communication {
+    id: number;
+    user?: User;
+    user_id: number;
+    title: string;
+    type: string;
+    content: string;
+    created_at: string;
+    updated_at: string;
 }
