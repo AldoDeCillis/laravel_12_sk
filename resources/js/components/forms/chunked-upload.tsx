@@ -5,13 +5,13 @@ interface ChunkedUploadProps {
     documentTitle: string;
     dstPath: string;
     setUploading: (uploading: boolean) => void;
+    onUploadComplete?: (uploadedFileName: string) => void;
 }
 
-const ChunkedUpload: React.FC<ChunkedUploadProps> = ({ documentTitle, dstPath, setUploading }) => {
+const ChunkedUpload: React.FC<ChunkedUploadProps> = ({ documentTitle, dstPath, setUploading, onUploadComplete }) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [progress, setProgress] = useState(0);
     const [dragOver, setDragOver] = useState(false);
-    const [uploadedFileName, setUploadedFileName] = useState('');
 
     // Dimensione chunk (2MB)
     const chunkSize = 2 * 1024 * 1024;
@@ -22,7 +22,6 @@ const ChunkedUpload: React.FC<ChunkedUploadProps> = ({ documentTitle, dstPath, s
 
         const totalChunks = Math.ceil(file.size / chunkSize);
         let uploadedChunks = 0;
-        setUploadedFileName('');
 
         // Se non hai un documentTitle, costruiscine uno di default
         const effectiveTitle = documentTitle || file.name.replace(/\.[^/.]+$/, '').replace(/ /g, '_');
@@ -52,13 +51,10 @@ const ChunkedUpload: React.FC<ChunkedUploadProps> = ({ documentTitle, dstPath, s
             });
 
             try {
-                // Se hai bisogno dei cookie o del token CSRF, aggiungi:
-                // withCredentials: true,
-                // e un eventuale header 'X-CSRF-TOKEN': ...
                 await axios.post('/chunked-upload', formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content'),
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
                     },
                     withCredentials: true,
                 });
@@ -73,11 +69,12 @@ const ChunkedUpload: React.FC<ChunkedUploadProps> = ({ documentTitle, dstPath, s
             }
         }
 
-        setUploadedFileName(file.name);
+        if (onUploadComplete) {
+            onUploadComplete(file.name);
+        }
         setUploading(false);
     };
 
-    // Cambio file con l'input
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
             const file = e.target.files[0];
@@ -85,7 +82,6 @@ const ChunkedUpload: React.FC<ChunkedUploadProps> = ({ documentTitle, dstPath, s
         }
     };
 
-    // Gestione drag & drop
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         setDragOver(false);
@@ -115,7 +111,6 @@ const ChunkedUpload: React.FC<ChunkedUploadProps> = ({ documentTitle, dstPath, s
             >
                 <div className="text-center">
                     {progress > 0 && progress < 100 ? (
-                        // Se stiamo caricando (0 < progress < 100)
                         <div className="flex flex-col items-center">
                             <svg className="text-secondary-500 h-6 w-6 animate-spin" fill="none" viewBox="0 0 24 24">
                                 <circle className="opacity-25" cx="12" cy="12" r="10" strokeWidth="4" stroke="currentColor"></circle>
@@ -124,14 +119,11 @@ const ChunkedUpload: React.FC<ChunkedUploadProps> = ({ documentTitle, dstPath, s
                             <p className="text-secondary-600 mt-2 text-sm">Caricamento in corso... {progress}%</p>
                         </div>
                     ) : progress === 100 ? (
-                        // Upload completato, mostra un messaggio
                         <div className="flex flex-col items-center">
                             <p className="mb-2 text-sm text-green-600">Upload completato al 100%!</p>
-                            {uploadedFileName && (
-                                <p className="text-sm text-slate-600">
-                                    <strong>File caricato:</strong> {uploadedFileName}
-                                </p>
-                            )}
+                            <p className="text-sm text-slate-600">
+                                <strong>File caricato:</strong> {fileInputRef.current?.files?.[0]?.name || ''}
+                            </p>
                         </div>
                     ) : (
                         <>

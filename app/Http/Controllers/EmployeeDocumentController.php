@@ -18,11 +18,31 @@ class EmployeeDocumentController extends Controller
 {
     use AuthorizesRequests;
 
+    public function __construct(protected FilterRepository $filterRepository) {}
+
     public function index()
     {
         $this->authorize('viewAny', EmployeeDocument::class);
 
-        return Inertia::render('employee-document/index');
+        $categories = Category::all();
+        if (request()->has('category')) {
+            $category = Category::where('name', request()->get('category'))->first();
+            if ($category) {
+                $initCategory = $category->id;
+            }
+        }
+
+        $documents = EmployeeDocument::query()
+            ->with('user', 'category')
+            ->ownRecords(auth()->user());
+
+        $this->filterRepository->searchEmployeeDocuments($documents, request('searchQuery'));
+        $this->filterRepository->filterCategory($documents, request('categoryId'));
+
+        $documents = $documents->latest()->paginate(10);
+
+        return Inertia::render('employee-document/index',
+            ['initCategory' => $initCategory ?? null, 'categories' => $categories, 'documents' => $documents]);
     }
 
     public function create(FilterRepository $filterRepository)
@@ -96,12 +116,10 @@ class EmployeeDocumentController extends Controller
 
         // Cleanup
         session()->forget('uploaded_file_path');
-        if (file_exists($filePath)) {
-            unlink($filePath);
-        }
-        session()->flash('message', 'Documento caricato con successo!');
 
-        return redirect()->route('dashboard');
+        return redirect()->route('employee-documents.index')
+            ->with('success', 'Documento creato correttamente');
+
     }
 
     // Endpoint unico per i chunk: appende i chunk e, se è l'ultimo, sposta il file e salva in sessione
@@ -125,18 +143,24 @@ class EmployeeDocumentController extends Controller
 
         // 2) Se siamo all'ultimo chunk, sposto il file nella cartella finale e salvo in sessione
         if ($request->input('chunkIndex') + 1 == $request->input('totalChunks')) {
-            // Esempio di cartella finale: /private/employee-documents/
             $destinationPath = storage_path('app/private/'.rtrim($request->input('dstPath'), '/'));
             if (! is_dir($destinationPath)) {
                 mkdir($destinationPath, 0777, true);
             }
 
-            $fileName = $documentTitle.'.'.$ext;
+            $fileName = $documentTitle.'.'.($request->input('fileExtension') ?: 'pdf');
             $destinationFile = $destinationPath.DIRECTORY_SEPARATOR.$fileName;
 
+            Log::debug('ChunkUpload: Moving file', ['from' => $tempFilePath, 'to' => $destinationFile]);
+
             try {
+                if (! file_exists($tempFilePath)) {
+                    Log::error('ChunkUpload: Temp file does not exist', ['tempFilePath' => $tempFilePath]);
+
+                    return response()->json(['error' => 'File temporaneo non trovato.'], 500);
+                }
+
                 \File::move($tempFilePath, $destinationFile);
-                // Salviamo il percorso finale in sessione, così la store() potrà usarlo
                 session()->put('uploaded_file_path', $destinationFile);
             } catch (\Exception $e) {
                 Log::error('chunkUpload: Error moving file.', ['error' => $e->getMessage()]);

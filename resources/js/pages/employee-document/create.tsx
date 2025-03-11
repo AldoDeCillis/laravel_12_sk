@@ -43,6 +43,7 @@ const Create: React.FC = () => {
 
     const [step, setStep] = useState(1);
     const [selectedEmployee, setSelectedEmployee] = useState<number | null>(null);
+    const [uploadedFileName, setUploadedFileName] = useState<string>('');
 
     // Campi del form
     const [documentCategory, setDocumentCategory] = useState<number | null>(null);
@@ -52,13 +53,11 @@ const Create: React.FC = () => {
     // Ricerca
     const [searchQuery, setSearchQuery] = useState('');
 
-    // Stato di caricamento
+    // Stato di caricamento ed errori
     const [isUploading, setIsUploading] = useState(false);
-
-    // Errori
     const [errors, setErrors] = useState<Record<string, string>>({});
 
-    // Esempio: ricarica la pagina con searchQuery in query string
+    // Ricarica la pagina con searchQuery in query string
     useEffect(() => {
         router.get('/employee-documents/create', { searchQuery }, { preserveState: true, replace: true });
     }, [searchQuery]);
@@ -73,12 +72,8 @@ const Create: React.FC = () => {
         setDocumentCategory(null);
         setDocumentDescription('');
         setSelectedEmployee(null);
+        setUploadedFileName('');
         setStep(1);
-    };
-
-    const handleUploadComplete = (uploadedFileName: string) => {
-        console.log('[Create] handleUploadComplete -> File caricato:', uploadedFileName);
-        saveDocument(uploadedFileName);
     };
 
     const saveDocument = (uploadedFileName: string) => {
@@ -100,7 +95,6 @@ const Create: React.FC = () => {
             {
                 onSuccess: (page) => {
                     console.log('[Create] store onSuccess ->', page);
-                    window.location.href = '/dashboard';
                 },
                 onError: (errs) => {
                     console.error('[Create] store onError ->', errs);
@@ -120,9 +114,7 @@ const Create: React.FC = () => {
                             type="text"
                             placeholder="Cerca un dipendente per nome o email..."
                             value={searchQuery}
-                            onChange={(e) => {
-                                setSearchQuery(e.target.value);
-                            }}
+                            onChange={(e) => setSearchQuery(e.target.value)}
                             className="mb-4 w-full rounded-md border p-2"
                         />
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -214,9 +206,7 @@ const Create: React.FC = () => {
                                             id="documentTitle"
                                             autoComplete="off"
                                             value={documentTitle}
-                                            onChange={(e) => {
-                                                setDocumentTitle(e.target.value);
-                                            }}
+                                            onChange={(e) => setDocumentTitle(e.target.value)}
                                             placeholder="Es. Busta Paga Febbraio 2025"
                                         />
                                         <InputError message={(errors as any)?.title} />
@@ -229,7 +219,6 @@ const Create: React.FC = () => {
                                         <Select
                                             value={documentCategory ? String(documentCategory) : ''}
                                             onValueChange={(val) => {
-                                                // converto la string in number
                                                 const parsed = parseInt(val, 10);
                                                 setDocumentCategory(isNaN(parsed) ? null : parsed);
                                             }}
@@ -255,9 +244,7 @@ const Create: React.FC = () => {
                                         id="documentDescription"
                                         placeholder="Inserisci una breve descrizione del documento"
                                         value={documentDescription}
-                                        onChange={(e) => {
-                                            setDocumentDescription(e.target.value);
-                                        }}
+                                        onChange={(e) => setDocumentDescription(e.target.value)}
                                     />
                                     <InputError message={(errors as any)?.description} />
                                 </div>
@@ -269,47 +256,30 @@ const Create: React.FC = () => {
                                     <ChunkedUpload
                                         documentTitle={documentTitle || 'default'}
                                         dstPath="employee-documents/"
-                                        setUploading={(uploading) => {
-                                            setIsUploading(uploading);
-                                        }}
+                                        setUploading={setIsUploading}
+                                        onUploadComplete={setUploadedFileName}
                                     />
                                     <InputError message={(errors as any)?.file} />
                                 </div>
                             </div>
 
                             <div className="flex justify-end">
-                                {isUploading ? (
-                                    <button
-                                        className="focus:ring-secondary-500 inline-flex cursor-not-allowed items-center rounded-xl bg-gray-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none"
-                                        disabled
-                                        type="submit"
+                                <button
+                                    className="bg-secondary-600 hover:bg-secondary-500 focus:ring-secondary-500 inline-flex items-center rounded-xl px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none"
+                                    type="button"
+                                    onClick={() => saveDocument(uploadedFileName)}
+                                    disabled={isUploading || !uploadedFileName}
+                                >
+                                    Salva il Documento
+                                    <svg
+                                        className="ml-2 h-4 w-4 transform transition-transform group-hover:translate-x-1"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
                                     >
-                                        <svg className="text-secondary-500 mr-2 h-6 w-6 animate-spin" fill="none" viewBox="0 0 24 24">
-                                            <circle className="opacity-25" cx="12" cy="12" r="10" strokeWidth="4" stroke="currentColor"></circle>
-                                            <path className="opacity-75" d="M4 12a8 8 0 018-8v8z" fill="currentColor"></path>
-                                        </svg>
-                                        Caricamento in corso...
-                                    </button>
-                                ) : (
-                                    <button
-                                        className="bg-secondary-600 hover:bg-secondary-500 focus:ring-secondary-500 inline-flex items-center rounded-xl px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none"
-                                        type="submit"
-                                        onClick={() => {
-                                            // Al termine dell'upload chunk, handleUploadComplete(...) chiamerà saveDocument
-                                            handleUploadComplete('default');
-                                        }}
-                                    >
-                                        Carica il Documento
-                                        <svg
-                                            className="ml-2 h-4 w-4 transform transition-transform group-hover:translate-x-1"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            viewBox="0 0 24 24"
-                                        >
-                                            <path d="M14 5l7 7m0 0l-7 7m7-7H3" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
-                                        </svg>
-                                    </button>
-                                )}
+                                        <path d="M14 5l7 7m0 0l-7 7m7-7H3" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" />
+                                    </svg>
+                                </button>
                             </div>
                         </form>
                     </div>

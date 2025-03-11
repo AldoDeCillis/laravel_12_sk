@@ -23,6 +23,14 @@ class EmployeeDocument extends Model
         'updated_at',
     ];
 
+    protected $appends = ['created_at_formatted'];
+
+    // Definisci un accessor per "created_at_formatted"
+    public function getCreatedAtFormattedAttribute()
+    {
+        return $this->created_at->format('d/m/Y');
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');

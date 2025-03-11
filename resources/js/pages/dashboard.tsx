@@ -35,7 +35,7 @@ const dashboardCards: DashboardCardData[] = [
                 variant: 'primary',
             },
             {
-                href: '/documenti-dipendenti',
+                href: 'employee-documents/',
                 icon: 'fa-regular fa-list',
                 label: 'Lista Documenti',
                 variant: 'secondary',

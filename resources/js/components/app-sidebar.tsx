@@ -1,19 +1,31 @@
+// File: src/components/AppSidebar.tsx
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { BookOpen, Folder, Plus } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const mainNavItems: NavItem[] = [
-    {
-        title: 'Dashboard',
-        url: '/',
-        icon: LayoutGrid,
+const admin = {
+    user: {
+        role: 'admin',
     },
-];
+};
+
+const mainNavItems: NavItem[] = [
+    admin && {
+        title: 'Nuovo Documento',
+        url: '/employee-documents/create',
+        icon: Plus,
+    },
+    admin && {
+        title: 'Nuova Comunicazione',
+        url: '/employee-documents/create',
+        icon: Plus,
+    },
+].filter(Boolean) as NavItem[];
 
 // Modifica qui i dati per Repository e Documentation
 const footerNavItems: NavItem[] = [
@@ -29,14 +41,18 @@ const footerNavItems: NavItem[] = [
     },
 ];
 
-export function AppSidebar() {
+interface AppSidebarProps {
+    extraContent?: React.ReactNode;
+}
+
+export function AppSidebar({ extraContent }: AppSidebarProps) {
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
+                            <Link href="/" prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
@@ -46,6 +62,9 @@ export function AppSidebar() {
 
             <SidebarContent>
                 <NavMain items={mainNavItems} />
+
+                {/* Se abbiamo extraContent, lo inseriamo qui */}
+                {extraContent && <div className="p-6">{extraContent}</div>}
             </SidebarContent>
 
             <SidebarFooter>
