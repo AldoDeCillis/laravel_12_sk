@@ -77,10 +77,7 @@ const Create: React.FC = () => {
     };
 
     const saveDocument = (uploadedFileName: string) => {
-        if (!documentTitle || !documentCategory || !selectedEmployee) {
-            alert('Titolo, categoria e dipendente sono obbligatori.');
-            return;
-        }
+        setErrors({});
 
         router.post(
             '/employee-documents',
@@ -268,7 +265,7 @@ const Create: React.FC = () => {
                                     className="bg-secondary-600 hover:bg-secondary-500 focus:ring-secondary-500 inline-flex items-center rounded-xl px-6 py-3 text-sm font-semibold text-white shadow-sm transition-colors duration-200 focus:ring-2 focus:ring-offset-2 focus:outline-none"
                                     type="button"
                                     onClick={() => saveDocument(uploadedFileName)}
-                                    disabled={isUploading || !uploadedFileName}
+                                    disabled={isUploading}
                                 >
                                     Salva il Documento
                                     <svg

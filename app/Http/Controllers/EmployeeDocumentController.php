@@ -71,6 +71,7 @@ class EmployeeDocumentController extends Controller
             'user_id' => 'required|exists:users,id',
             'title' => 'required|string',
             'description' => 'nullable|string',
+            'file' => 'required',
         ]);
 
         // Recupera il file path dalla sessione
