@@ -1,5 +1,3 @@
-// File: src/Pages/EmployeeDocuments/Index.tsx
-
 import ConfirmModal from '@/components/confirm-modal';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';

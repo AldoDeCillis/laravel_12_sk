@@ -20,7 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/employee-documents', [EmployeeDocumentController::class, 'index'])->name('employee-documents.index');
     Route::get('/employee-documents/create', [EmployeeDocumentController::class, 'create'])->name('employee-documents.create');
     Route::post('/employee-documents', [EmployeeDocumentController::class, 'store'])->name('employee-documents.store');
-    Route::get('/employee-documents/{employeeDocument}/serve', [EmployeeDocumentController::class, 'serveFile'])->name('employee-documents.serveFile');
+    Route::get('/employee-documents/{document}/serve', [EmployeeDocumentController::class, 'serveFile'])->name('employee-documents.serveFile');
     Route::post('/chunked-upload', [EmployeeDocumentController::class, 'chunkUpload']);
 
     // Comunicazioni

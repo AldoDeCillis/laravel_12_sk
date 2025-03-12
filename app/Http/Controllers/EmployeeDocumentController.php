@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Category;
-use App\Models\EmployeeDocument;
-use App\Repositories\FilterRepository;
-use App\Services\ChunkUploadService;
-use App\Services\EmployeeDocumentService;
-use App\Services\NotificationService;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\File;
 use Illuminate\Http\Request;
+use App\Models\EmployeeDocument;
 use Illuminate\Support\Facades\Log;
-use Inertia\Inertia;
+use App\Services\ChunkUploadService;
+use App\Services\NotificationService;
+use App\Repositories\FilterRepository;
+use Illuminate\Support\Facades\Storage;
+use App\Services\EmployeeDocumentService;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class EmployeeDocumentController extends Controller
 {
@@ -171,5 +172,22 @@ class EmployeeDocumentController extends Controller
         }
 
         return response()->json(['status' => 'ok'], 200);
+    }
+
+    public function serveFile(EmployeeDocument $document)
+    {
+        $this->authorize('view', $document);
+
+    if (! Storage::disk('private')->exists($document->file_path)) {
+        abort(404, 'File not found.');
+    }
+
+    $filePath = storage_path("app/private/{$document->file_path}");
+    $contentType = Storage::disk('private')->mimeType($document->file_path);
+
+    return response()->file($filePath, [
+        'Content-Type' => $contentType,
+        'Content-Disposition' => 'inline; filename="' . basename($document->file_path) . '"',
+    ]);
     }
 }
