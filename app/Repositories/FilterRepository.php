@@ -44,6 +44,7 @@ class FilterRepository
         if (! empty($searchQuery)) {
             $query->where(function ($q) use ($searchQuery) {
                 $q->where('title', 'like', '%'.$searchQuery.'%')
+                    ->orWhere('type', 'like', '%'.$searchQuery.'%')
                     ->orWhere('content', 'like', '%'.$searchQuery.'%');
             });
         }

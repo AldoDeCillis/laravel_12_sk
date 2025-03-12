@@ -24,7 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/chunked-upload', [EmployeeDocumentController::class, 'chunkUpload']);
 
     // Comunicazioni
-    Route::get('/communications', [CommunicationController::class, 'index'])->name('communications.index');
+    Route::get('/communications', [CommunicationController::class, 'index'])->name('communication.index');
     Route::get('/communications/create', [CommunicationController::class, 'create'])->name('communications.create');
     Route::post('/communications', [CommunicationController::class, 'store'])->name('communications.store');
 });

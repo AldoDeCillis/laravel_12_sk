@@ -32,9 +32,9 @@ const CommunicationCreate: React.FC = () => {
     // Stato del wizard a 2 step
     const [step, setStep] = useState<number>(1);
     const [selectedEmployee, setSelectedEmployee] = useState<number | null>(null);
-    const [communicationTitle, setCommunicationTitle] = useState<string>('');
-    const [communicationType, setCommunicationType] = useState<string>('');
-    const [communicationContent, setCommunicationContent] = useState<string>('');
+    const [title, setTitle] = useState<string>('');
+    const [type, setType] = useState<string>('');
+    const [content, setContent] = useState<string>('');
     const [searchQuery, setSearchQuery] = useState<string>('');
 
     // Stato per errori (client-side o backend)
@@ -63,9 +63,10 @@ const CommunicationCreate: React.FC = () => {
 
         router.post(
             '/communications',
-            { communicationType, communicationTitle, communicationContent, employeeId: selectedEmployee },
+            { type, title, content, user_id: selectedEmployee },
             {
                 onSuccess: () => {
+                    console.log(selectedEmployee);
                     // Il backend imposta il flash message e redireziona alla dashboard
                 },
                 onError: (err) => {
@@ -86,9 +87,9 @@ const CommunicationCreate: React.FC = () => {
                         <div className="mb-6">
                             <Label>Tipo Comunicazione</Label>
                             <Select
-                                value={communicationType}
+                                value={type}
                                 onValueChange={(val) => {
-                                    setCommunicationType(val);
+                                    setType(val);
                                     if (val === 'Public') setStep(2);
                                 }}
                             >
@@ -105,7 +106,7 @@ const CommunicationCreate: React.FC = () => {
                             </Select>
                             {localErrors.communicationType && <InputError message={localErrors.communicationType} />}
                         </div>
-                        {communicationType !== '' && communicationType !== 'Public' && (
+                        {type !== '' && type !== 'Public' && (
                             <div className="mb-6">
                                 <h2 className="mb-2 text-2xl font-bold text-slate-900">Seleziona Dipendente</h2>
                                 <p className="mb-4 text-sm text-slate-600">Seleziona un dipendente a cui assegnare la comunicazione</p>
@@ -170,7 +171,7 @@ const CommunicationCreate: React.FC = () => {
                         <div className="mb-8">
                             <h2 className="text-2xl font-bold text-slate-900">Assegna Comunicazione</h2>
                             <p className="text-sm text-slate-600">
-                                {communicationType !== 'Public'
+                                {type !== 'Public'
                                     ? `Stai assegnando una comunicazione a ${employees.find((emp) => emp.id === selectedEmployee)?.name || ''}`
                                     : 'Stai creando una comunicazione pubblica per tutti gli utenti'}
                             </p>
@@ -179,31 +180,31 @@ const CommunicationCreate: React.FC = () => {
                             <div className="space-y-6 rounded-2xl bg-slate-50 p-6">
                                 <div className="flex flex-col space-y-6 md:flex-row md:space-y-0 md:space-x-6">
                                     <div className="w-full md:w-1/2">
-                                        <Label htmlFor="communicationTitle">
+                                        <Label htmlFor="title">
                                             Titolo <span className="text-red-500">*</span>
                                         </Label>
                                         <Input
                                             type="text"
-                                            id="communicationTitle"
+                                            id="title"
                                             autoComplete="off"
-                                            value={communicationTitle}
-                                            onChange={(e) => setCommunicationTitle(e.target.value)}
+                                            value={title}
+                                            onChange={(e) => setTitle(e.target.value)}
                                             placeholder="Es. Avviso lavori.."
                                         />
-                                        {localErrors.communicationTitle && <InputError message={localErrors.communicationTitle} />}
+                                        {localErrors.title && <InputError message={localErrors.title} />}
                                     </div>
                                 </div>
                                 <div>
-                                    <Label htmlFor="communicationContent">
+                                    <Label htmlFor="content">
                                         Contenuto <span className="text-red-500">*</span>
                                     </Label>
                                     <Textarea
-                                        id="communicationContent"
+                                        id="content"
                                         placeholder="Inserisci il contenuto della comunicazione"
-                                        value={communicationContent}
-                                        onChange={(e) => setCommunicationContent(e.target.value)}
+                                        value={content}
+                                        onChange={(e) => setContent(e.target.value)}
                                     />
-                                    {localErrors.communicationContent && <InputError message={localErrors.communicationContent} />}
+                                    {localErrors.content && <InputError message={localErrors.content} />}
                                 </div>
                             </div>
                             <div className="flex justify-end">

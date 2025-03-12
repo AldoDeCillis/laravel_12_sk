@@ -68,10 +68,9 @@ export interface Document {
 
 export interface Communication {
     id: number;
-    user?: User;
-    user_id: number;
+    user?: { id: number; name: string; email: string };
     title: string;
-    type: string;
+    type?: string;
     content: string;
     created_at: string;
     updated_at: string;
