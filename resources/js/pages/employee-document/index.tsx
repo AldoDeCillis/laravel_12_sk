@@ -73,7 +73,7 @@ export default function Index() {
 
     const deleteDocument = () => {
         if (!confirmDocumentId) return;
-        router.delete(`/employee-documents/${confirmDocumentId}`, {
+        router.delete(`/employee-document/${confirmDocumentId}`, {
             onSuccess: () => {
                 closeConfirmModal();
             },
@@ -389,7 +389,7 @@ export default function Index() {
                                 <iframe
                                     className="h-[600px] w-full md:h-[calc(90vh-160px)]"
                                     frameBorder="0"
-                                    src={`/employee-documents/${selectedDoc.id}/serve`}
+                                    src={`/employee-document/${selectedDoc.id}/serve`}
                                 />
                             </div>
                         </div>

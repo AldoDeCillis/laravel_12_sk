@@ -29,7 +29,7 @@ const dashboardCards: DashboardCardData[] = [
         icon: 'fa-regular fa-file-signature',
         actions: [
             {
-                href: 'employee-documents/create',
+                href: 'employee-document/create',
                 icon: 'fa-regular fa-upload',
                 label: 'Carica Documento',
                 variant: 'primary',
@@ -65,7 +65,7 @@ const dashboardCards: DashboardCardData[] = [
         icon: 'fa-regular fa-bullhorn',
         actions: [
             {
-                href: 'communications/create',
+                href: 'communication/create',
                 icon: 'fa-regular fa-plus',
                 label: 'Crea Comunicazione',
                 variant: 'primary',
@@ -101,13 +101,13 @@ const dashboardCards: DashboardCardData[] = [
         icon: 'fa-regular fa-user',
         actions: [
             {
-                href: '/crea-dipendente',
+                href: '/user/create',
                 icon: 'fa-regular fa-plus',
                 label: 'Aggiungi Dipendente',
                 variant: 'primary',
             },
             {
-                href: '/lista-dipendenti',
+                href: '/users',
                 icon: 'fa-regular fa-list',
                 label: 'Gestisci Dipendenti',
                 variant: 'secondary',

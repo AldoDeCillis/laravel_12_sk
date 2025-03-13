@@ -3,6 +3,7 @@
 use App\Http\Controllers\CommunicationController;
 use App\Http\Controllers\EmployeeDocumentController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -16,17 +17,22 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
+    // Dipendenti
+    Route::get('/users', [UserController::class, 'index'])->name('user.index');
+    Route::get('/user/create', [UserController::class, 'create'])->name('user.create');
+    Route::post('/user', [UserController::class, 'store'])->name('user.store');
+
     // Documenti dipendenti
     Route::get('/employee-documents', [EmployeeDocumentController::class, 'index'])->name('employee-documents.index');
-    Route::get('/employee-documents/create', [EmployeeDocumentController::class, 'create'])->name('employee-documents.create');
-    Route::post('/employee-documents', [EmployeeDocumentController::class, 'store'])->name('employee-documents.store');
-    Route::get('/employee-documents/{document}/serve', [EmployeeDocumentController::class, 'serveFile'])->name('employee-documents.serveFile');
+    Route::get('/employee-document/create', [EmployeeDocumentController::class, 'create'])->name('employee-document.create');
+    Route::post('/employee-document', [EmployeeDocumentController::class, 'store'])->name('employee-document.store');
     Route::post('/chunked-upload', [EmployeeDocumentController::class, 'chunkUpload']);
+    Route::get('/employee-document/{document}/serve', [EmployeeDocumentController::class, 'serveFile'])->name('employee-document.serveFile');
 
     // Comunicazioni
     Route::get('/communications', [CommunicationController::class, 'index'])->name('communication.index');
-    Route::get('/communications/create', [CommunicationController::class, 'create'])->name('communications.create');
-    Route::post('/communications', [CommunicationController::class, 'store'])->name('communications.store');
+    Route::get('/communication/create', [CommunicationController::class, 'create'])->name('communication.create');
+    Route::post('/communication', [CommunicationController::class, 'store'])->name('communication.store');
 });
 
 require __DIR__.'/settings.php';

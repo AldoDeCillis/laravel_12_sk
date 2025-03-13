@@ -2,8 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Models\User;
-
 class FilterRepository
 {
     public function filterCategory($query, $categoryId)
@@ -15,13 +13,19 @@ class FilterRepository
         return $query;
     }
 
-    public function searchEmployee($searchQuery)
+    public function searchEmployee($query, $searchQuery)
     {
-        return User::role('employee')
-            ->where(function ($query) use ($searchQuery) {
-                $query->where('name', 'like', '%'.$searchQuery.'%')
-                    ->orWhere('email', 'like', '%'.$searchQuery.'%');
-            });
+        if (! empty($searchQuery)) {
+            return $query->role('employee')
+                ->where(function ($query) use ($searchQuery) {
+                    $query->where('name', 'like', '%'.$searchQuery.'%')
+                        ->orWhere('email', 'like', '%'.$searchQuery.'%');
+                });
+        } else {
+            return $query->role('employee');
+        }
+
+        return $query;
     }
 
     public function searchEmployeeDocuments($query, $searchQuery)

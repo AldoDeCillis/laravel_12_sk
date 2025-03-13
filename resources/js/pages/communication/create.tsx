@@ -1,4 +1,3 @@
-// CommunicationCreate.tsx
 import InputError from '@/components/input-error';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,7 +11,7 @@ import { Employee } from '../../types/index';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
-    { title: 'Crea Comunicazione Dipendente', href: '/communications/create' },
+    { title: 'Crea Comunicazione Dipendente', href: '/communication/create' },
 ];
 
 interface PageProps {
@@ -47,7 +46,7 @@ const CommunicationCreate: React.FC = () => {
     const communicationTypes = ['Info', 'Public', 'Dispute'];
 
     useEffect(() => {
-        router.get('/communications/create', { searchQuery }, { preserveState: true, replace: true });
+        router.get('/communication/create', { searchQuery }, { preserveState: true, replace: true });
         if (props.employees) {
             setEmployees(props.employees.data);
         }
@@ -62,7 +61,7 @@ const CommunicationCreate: React.FC = () => {
         e.preventDefault();
 
         router.post(
-            '/communications',
+            '/communication',
             { type, title, content, user_id: selectedEmployee },
             {
                 onSuccess: () => {

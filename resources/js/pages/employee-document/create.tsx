@@ -12,7 +12,7 @@ import { Category, Employee } from '../../types/index';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Dashboard', href: '/dashboard' },
-    { title: 'Crea Documento Dipendente', href: '/employee-documents/create' },
+    { title: 'Crea Documento Dipendente', href: '/employee-document/create' },
 ];
 
 interface PageProps {
@@ -49,7 +49,7 @@ const Create: React.FC = () => {
 
     // Ricarica la pagina con searchQuery in query string
     useEffect(() => {
-        router.get('/employee-documents/create', { searchQuery }, { preserveState: true, replace: true });
+        router.get('/employee-document/create', { searchQuery }, { preserveState: true, replace: true });
     }, [searchQuery]);
 
     const handleSelectEmployee = (id: number) => {
@@ -70,7 +70,7 @@ const Create: React.FC = () => {
         setErrors({});
 
         router.post(
-            '/employee-documents',
+            '/employee-document',
             {
                 category_id: documentCategory,
                 user_id: selectedEmployee,

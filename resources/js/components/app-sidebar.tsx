@@ -17,12 +17,12 @@ const admin = {
 const mainNavItems: NavItem[] = [
     admin && {
         title: 'Nuovo Documento',
-        url: '/employee-documents/create',
+        url: '/employee-document/create',
         icon: Plus,
     },
     admin && {
         title: 'Nuova Comunicazione',
-        url: '/employee-documents/create',
+        url: '/employee-document/create',
         icon: Plus,
     },
 ].filter(Boolean) as NavItem[];
