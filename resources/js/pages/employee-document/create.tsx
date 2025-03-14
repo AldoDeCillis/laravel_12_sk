@@ -96,15 +96,17 @@ const Create: React.FC = () => {
             <div className="p-4">
                 {step === 1 ? (
                     <div>
-                        <h2 className="mb-4 text-2xl font-bold">Seleziona Dipendente</h2>
-                        <input
-                            type="text"
-                            placeholder="Cerca un dipendente per nome o email..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="mb-4 w-full rounded-md border p-2"
-                        />
-                        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="flex w-full flex-col md:flex-row">
+                            <h2 className="w-full text-2xl font-bold md:my-4">Seleziona Dipendente</h2>
+                            <Input
+                                type="text"
+                                placeholder="Cerca un dipendente per nome o email..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="my-4"
+                            />
+                        </div>
+                        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                             {employees.map((emp) => (
                                 <button
                                     key={emp.id}
@@ -138,7 +140,7 @@ const Create: React.FC = () => {
                     <div>
                         <button
                             onClick={handlePreviousStep}
-                            className="text-primary-600 hover:text-primary-500 mb-4 inline-flex items-center text-sm font-medium"
+                            className="text-primary-600 hover:text-primary-500 mb-4 inline-flex cursor-pointer items-center text-sm font-medium"
                         >
                             <svg
                                 className="mr-1 h-4 w-4 transform transition-transform group-hover:-translate-x-1"

@@ -12,9 +12,9 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 type CardAction = {
     href: string;
-    icon: string;
-    label: string;
-    variant: 'primary' | 'secondary';
+    icon: string | null;
+    label: string | null;
+    variant: 'primary' | 'secondary' | null;
 };
 
 type DashboardCardData = {
@@ -117,7 +117,14 @@ const dashboardCards: DashboardCardData[] = [
     {
         title: 'Log Accessi',
         icon: 'fa-regular fa-list-check',
-        actions: [], // Nessuna azione definita
+        actions: [
+            {
+                href: '/access-logs',
+                icon: null,
+                label: null,
+                variant: null,
+            },
+        ],
     },
 ];
 

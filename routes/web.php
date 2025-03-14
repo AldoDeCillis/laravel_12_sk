@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccessLogController;
 use App\Http\Controllers\CommunicationController;
 use App\Http\Controllers\EmployeeDocumentController;
 use App\Http\Controllers\FrontController;
@@ -39,6 +40,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/galleries', [GalleryController::class, 'index'])->name('gallery.index');
     Route::get('/gallery/create', [GalleryController::class, 'create'])->name('gallery.create');
     Route::post('/gallery', [GalleryController::class, 'store'])->name('gallery.store');
+
+    // Access Logs
+    Route::get('/access-logs', [AccessLogController::class, 'index'])->name('access-logs.index');
+    Route::post('/access-log', [AccessLogController::class, 'store'])->name('access-log.store');
 });
 
 require __DIR__.'/settings.php';

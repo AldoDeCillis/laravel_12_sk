@@ -53,7 +53,7 @@ export default function Index() {
     const openDocModal = (doc: Document) => {
         setSelectedDoc(doc);
         setShowDocModal(true);
-        // Se serve, puoi invocare un endpoint per loggare l'accesso
+        router.post('/access-log', { user_id: doc.user ? doc.user.id : null, loggable_type: 'Employee Document', loggable_id: doc.id });
     };
 
     const closeDocModal = () => {
@@ -212,100 +212,6 @@ export default function Index() {
                         </div>
                     </div>
                 </div>
-
-                {/* <div className="hidden h-full w-full md:flex md:flex-col">
-                    <div className="h-full bg-slate-50 p-4">
-                        <table className="w-full overflow-y-auto">
-                            <thead>
-                                <tr>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-slate-500 uppercase">Documento</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-slate-500 uppercase">Dipendente</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-slate-500 uppercase">Data</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-slate-500 uppercase">Categoria</th>
-                                    <th className="px-6 py-3 text-left text-xs font-medium tracking-wider text-slate-500 uppercase">Azioni</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-200 bg-white">
-                                {documents.data.length === 0 && (
-                                    <tr>
-                                        <td className="px-6 py-10 text-center" colSpan={5}>
-                                            <div className="flex flex-col items-center">
-                                                <i className="fa-regular fa-folder-open mb-4 text-4xl text-slate-400"></i>
-                                                <p className="text-slate-500">Nessun documento trovato</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )}
-                                {documents.data.map((doc) => (
-                                    <tr key={doc.id} className="hover:bg-secondary-100 transition-colors">
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center">
-                                                <i className="fa-regular fa-file-lines text-secondary-500 mr-3"></i>
-                                                <div>
-                                                    <div className="text-sm font-medium text-slate-900">{doc.title}</div>
-                                                    <div className="text-sm text-slate-500">{doc.description}</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center">
-                                                <div className="bg-secondary-100 flex h-8 w-8 items-center justify-center rounded-full">
-                                                    <i className="fa-regular fa-user text-secondary-600"></i>
-                                                </div>
-                                                <div className="ml-3">
-                                                    <div className="text-sm font-medium text-slate-900">{doc.user?.name ?? 'N/D'}</div>
-                                                    <div className="text-sm text-slate-500">{doc.user?.email ?? 'N/D'}</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 text-sm text-slate-500">{doc.created_at_formatted ?? ''}</td>
-                                        <td className="px-6 py-4">
-                                            <span className="bg-secondary-200 text-secondary-800 inline-flex items-center rounded-full px-2.5 py-0.5 text-[7pt] font-medium">
-                                                {doc.category?.name ?? 'N/D'}
-                                            </span>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="flex items-center space-x-3">
-                                                <button
-                                                    className="text-secondary-600 hover:text-secondary-500"
-                                                    title="Visualizza"
-                                                    onClick={() => {
-                                                        openDocModal(doc);
-                                                    }}
-                                                >
-                                                    <i className="fa-regular fa-eye"></i>
-                                                </button>
-                                                {doc.can_delete && (
-                                                    <button
-                                                        className="text-red-600 hover:text-red-500"
-                                                        title="Elimina"
-                                                        onClick={() => {
-                                                            openConfirmModal(doc.id);
-                                                        }}
-                                                    >
-                                                        <i className="fa-regular fa-trash"></i>
-                                                    </button>
-                                                )}
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div className="border-t border-slate-200 p-4">
-                        <div className="flex justify-center">
-                            {documents.links.map((link, index) => (
-                                <Link
-                                    key={index}
-                                    href={link.url || '#'}
-                                    className={link.active ? 'text-secondary-600 mx-1 font-bold' : 'hover:text-secondary-600 mx-1 text-slate-600'}
-                                    dangerouslySetInnerHTML={{ __html: link.label }}
-                                />
-                            ))}
-                        </div>
-                    </div>
-                </div> */}
 
                 {/* Vista Mobile: Card */}
                 <div className="mx-auto flex max-w-[90rem] flex-col space-y-4 px-4 pt-4 md:hidden">

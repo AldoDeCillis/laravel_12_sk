@@ -83,7 +83,7 @@ const CommunicationCreate: React.FC = () => {
                     <div>
                         <h2 className="mb-4 text-2xl font-bold text-slate-900">Seleziona Tipo di Comunicazione</h2>
                         <p className="mb-6 text-sm text-slate-600">Scegli il tipo di comunicazione da inviare</p>
-                        <div className="mb-6">
+                        <div className="mb-6 w-1/2">
                             <Label>Tipo Comunicazione</Label>
                             <Select
                                 value={type}
@@ -103,20 +103,24 @@ const CommunicationCreate: React.FC = () => {
                                     ))}
                                 </SelectContent>
                             </Select>
-                            {localErrors.communicationType && <InputError message={localErrors.communicationType} />}
+                            <InputError message={localErrors.communicationType} />
                         </div>
                         {type !== '' && type !== 'Public' && (
                             <div className="mb-6">
-                                <h2 className="mb-2 text-2xl font-bold text-slate-900">Seleziona Dipendente</h2>
-                                <p className="mb-4 text-sm text-slate-600">Seleziona un dipendente a cui assegnare la comunicazione</p>
-                                <div className="mb-4">
-                                    <Input
-                                        type="text"
-                                        placeholder="Cerca un dipendente per nome o email..."
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                        className="mb-4 w-full"
-                                    />
+                                <div className="flex w-full flex-col md:flex-row">
+                                    <div>
+                                        <h2 className="mb-2 text-2xl font-bold text-slate-900">Seleziona Dipendente</h2>
+                                        <p className="text-sm text-slate-600">Seleziona un dipendente a cui assegnare la comunicazione</p>
+                                    </div>
+                                    <div>
+                                        <Input
+                                            type="text"
+                                            placeholder="Cerca un dipendente per nome o email..."
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                            className="my-4 w-full"
+                                        />
+                                    </div>
                                 </div>
                                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                                     {employees.map((emp) => (
