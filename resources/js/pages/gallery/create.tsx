@@ -189,7 +189,7 @@ const Create: React.FC = () => {
                         onDrop={handleDrop}
                     >
                         <input accept="image/*" className="hidden" multiple type="file" ref={fileInputRef} onChange={handleFileChange} />
-                        <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="absolute inset-0 flex items-center justify-center cursor-pointer">
                             <div className="p-6 text-center">
                                 <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gray-200">
                                     <i className="fa-regular fa-cloud-arrow-up text-4xl text-gray-600"></i>

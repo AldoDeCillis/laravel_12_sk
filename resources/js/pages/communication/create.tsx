@@ -83,7 +83,7 @@ const CommunicationCreate: React.FC = () => {
                     <div>
                         <h2 className="mb-4 text-2xl font-bold text-slate-900">Seleziona Tipo di Comunicazione</h2>
                         <p className="mb-6 text-sm text-slate-600">Scegli il tipo di comunicazione da inviare</p>
-                        <div className="mb-6 w-1/2">
+                        <div className="mb-6 w-full md:w-1/2">
                             <Label>Tipo Comunicazione</Label>
                             <Select
                                 value={type}
@@ -108,11 +108,11 @@ const CommunicationCreate: React.FC = () => {
                         {type !== '' && type !== 'Public' && (
                             <div className="mb-6">
                                 <div className="flex w-full flex-col md:flex-row">
-                                    <div>
+                                    <div className='w-full md:w-1/2'>
                                         <h2 className="mb-2 text-2xl font-bold text-slate-900">Seleziona Dipendente</h2>
                                         <p className="text-sm text-slate-600">Seleziona un dipendente a cui assegnare la comunicazione</p>
                                     </div>
-                                    <div>
+                                    <div className='w-full md:w-1/2'>
                                         <Input
                                             type="text"
                                             placeholder="Cerca un dipendente per nome o email..."
@@ -158,7 +158,7 @@ const CommunicationCreate: React.FC = () => {
                 ) : (
                     <div>
                         <button
-                            className="text-primary-600 hover:text-primary-500 mb-8 inline-flex items-center text-sm font-medium"
+                            className="cursor-pointer text-primary-600 hover:text-primary-500 mb-8 inline-flex items-center text-sm font-medium"
                             onClick={previousStep}
                         >
                             <svg

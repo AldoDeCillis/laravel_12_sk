@@ -5,7 +5,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, Plus } from 'lucide-react';
+import { File, Speech } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const admin = {
@@ -18,28 +18,14 @@ const mainNavItems: NavItem[] = [
     admin && {
         title: 'Nuovo Documento',
         url: '/employee-document/create',
-        icon: Plus,
+        icon: File,
     },
     admin && {
         title: 'Nuova Comunicazione',
         url: '/employee-document/create',
-        icon: Plus,
+        icon: Speech,
     },
 ].filter(Boolean) as NavItem[];
-
-// Modifica qui i dati per Repository e Documentation
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Nuovo Repository',
-        url: 'https://nuovo-repository-link.com',
-        icon: Folder,
-    },
-    {
-        title: 'Nuova Documentation',
-        url: 'https://nuova-documentation-link.com',
-        icon: BookOpen,
-    },
-];
 
 interface AppSidebarProps {
     extraContent?: React.ReactNode;
@@ -68,7 +54,6 @@ export function AppSidebar({ extraContent }: AppSidebarProps) {
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

@@ -3,6 +3,7 @@ import AppLayout from '@/layouts/app-layout';
 import { Head, Link, router } from '@inertiajs/react';
 import React, { useEffect, useState } from 'react';
 import { BreadcrumbItem, Gallery, Media } from '../../types/index';
+import { Input } from '@/components/ui/input';
 
 interface GalleriesData {
     data: Gallery[];
@@ -142,14 +143,12 @@ const Index: React.FC<GalleryIndexProps> = ({ galleries: initialGalleries, view:
 
                         <div className="mt-6">
                             <div className="relative">
-                                <input
-                                    className="focus:border-secondary-500 focus:ring-secondary-500 w-full rounded-xl border-gray-300 bg-gray-50 py-3 pr-4 pl-12"
-                                    placeholder="Cerca gallerie..."
-                                    type="text"
-                                    value={searchQuery}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                <Input
+                                placeholder="Cerca gallerie..."
+                                type="search"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
                                 />
-                                <i className="fa-regular fa-search absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"></i>
                             </div>
                         </div>
                     </div>
