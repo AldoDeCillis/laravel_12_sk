@@ -75,3 +75,19 @@ export interface Communication {
     created_at: string;
     updated_at: string;
 }
+
+interface Media {
+    id: number;
+    file_name: string;
+    original_url: string;
+}
+
+interface Gallery {
+    id: number;
+    title: string;
+    description?: string;
+    media_count: number;
+    created_at: string;
+    firstMediaUrl?: string;
+    media?: Media[];
+}

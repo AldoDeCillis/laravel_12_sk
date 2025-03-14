@@ -3,6 +3,7 @@
 use App\Http\Controllers\CommunicationController;
 use App\Http\Controllers\EmployeeDocumentController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -33,6 +34,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/communications', [CommunicationController::class, 'index'])->name('communication.index');
     Route::get('/communication/create', [CommunicationController::class, 'create'])->name('communication.create');
     Route::post('/communication', [CommunicationController::class, 'store'])->name('communication.store');
+
+    // Gallerie Fotografiche
+    Route::get('/galleries', [GalleryController::class, 'index'])->name('gallery.index');
+    Route::get('/gallery/create', [GalleryController::class, 'create'])->name('gallery.create');
+    Route::post('/gallery', [GalleryController::class, 'store'])->name('gallery.store');
 });
 
 require __DIR__.'/settings.php';

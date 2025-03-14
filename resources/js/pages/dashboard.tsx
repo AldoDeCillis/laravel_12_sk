@@ -83,13 +83,13 @@ const dashboardCards: DashboardCardData[] = [
         icon: 'fa-regular fa-photo-film',
         actions: [
             {
-                href: '/crea-galleria',
+                href: '/gallery/create',
                 icon: 'fa-regular fa-plus',
                 label: 'Aggiungi Immagini',
                 variant: 'primary',
             },
             {
-                href: '/galleria',
+                href: '/galleries',
                 icon: 'fa-regular fa-list',
                 label: 'Gestisci Immagini',
                 variant: 'secondary',
